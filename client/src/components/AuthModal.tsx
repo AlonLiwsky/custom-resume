@@ -4,7 +4,7 @@ import { BsLinkedin } from 'react-icons/bs';
 import { AiOutlineClose } from 'react-icons/ai';
 
 function AuthModal({ onAuthClose }: { onAuthClose: () => void }) {
-    const [isSignIn, setIsSignIn] = useState(true); // toggle between SignIn and SignUp views
+    const [isSignIn, setIsSignIn] = useState(true); 
 
     return (
             <div className="fixed inset-0 flex items-center justify-center z-50">

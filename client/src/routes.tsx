@@ -3,11 +3,16 @@ import type { RouteObject } from 'react-router';
 import LoadingScreen from './components/LoadingScreen';
 import MainLayout from './components/MainLayout';
 
-const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => (
-  <Suspense fallback={<LoadingScreen />}>
-    <Component {...props} />
-  </Suspense>
-);
+// Define a generic type for React functional components
+type LoadableComponent<Props = {}> = React.FC<Props>;
+
+const Loadable = <Props extends {}>(Component: LoadableComponent<Props>) => 
+  (props: Props) => (
+    <Suspense fallback={<LoadingScreen />}>
+      <Component {...props} />
+    </Suspense>
+  );
+
 
 
 const LandingPage = Loadable(lazy(() => import('./pages/LandingPage')));

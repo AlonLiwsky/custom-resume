@@ -1,6 +1,6 @@
 import React, { useState, ReactNode } from 'react';
 import NavBar from './NavBar';
-import AuthModal from './AuthModal';  // Ensure this is the correct path
+import AuthModal from './AuthModal';  
 import { Outlet } from 'react-router-dom';
 
 interface MainLayoutProps {
