@@ -27,7 +27,7 @@ const saveExperience = async (experienceBody) => {
   });
 
   // Return only the missing fields
-  return (await fields).missingFields;
+  return {missing_fields: (await fields).missingFields};
 };
 
 module.exports = {
