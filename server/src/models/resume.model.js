@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
-const { roles } = require('../config/roles');
 
-const experienceSchema = mongoose.Schema(
+const rawExperienceSchema = mongoose.Schema(
   {
     experience: {
       type: String,
@@ -29,28 +26,57 @@ const experienceSchema = mongoose.Schema(
  * @param {ObjectId} userId - The user's id
  * @returns {Promise<boolean>}
  */
-experienceSchema.statics.userAlreadyHas = async function (userId) {
+rawExperienceSchema.statics.userAlreadyHas = async function (userId) {
   const user = await this.findOne({ userId });
   return !!user;
 };
 
-const missingFields =  mongoose.Schema({
-  missingFields: [Number]
-});
+// add plugin that converts mongoose to json
+rawExperienceSchema.plugin(toJSON);
+rawExperienceSchema.plugin(paginate);
+
+/**
+ * @typedef RawExperience
+ */
+const RawExperience = mongoose.model('RawExperience', rawExperienceSchema);
+
+const formattedExperienceSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    fields: [
+      {
+        field: {
+          type: String,
+          required: true,
+        },
+        value: {
+          type: mongoose.Schema.Types.Mixed, // Allow mixed types (string or array of key-value objects)
+          required: true,
+        },
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 // add plugin that converts mongoose to json
-experienceSchema.plugin(toJSON);
-experienceSchema.plugin(paginate);
+formattedExperienceSchema.plugin(toJSON);
+formattedExperienceSchema.plugin(paginate);
 
 /**
- * @typedef Experience
+ * @typedef FormattedExperience
  */
-const Experience = mongoose.model('Experience', experienceSchema);
+const FormattedExperience = mongoose.model('FormattedExperience', formattedExperienceSchema);
 
-/**
- * @typedef MissingFields
- */
-const MissingFields = mongoose.model('MissingFields', missingFields);
-
-//module.exports = {Experience, MissingFields};
-module.exports = Experience;
+module.exports = {
+  RawExperience,
+  FormattedExperience,
+};

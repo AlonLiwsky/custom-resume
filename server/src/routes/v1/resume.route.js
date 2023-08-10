@@ -2,14 +2,13 @@ const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const resumeValidation = require('../../validations/resume.validation');
-const userValidation = require('../../validations/user.validation');
 const resumeController = require('../../controllers/resume.controller');
 
 const router = express.Router();
 
 router
   .route('/experience')
-  .post(validate(resumeValidation.saveExperience), resumeController.saveExperience)
+  .post(auth(), validate(resumeValidation.saveExperience), resumeController.saveExperience);
   //.put(auth('manageUsers'), validate(userValidation.updateUser), resumeController.updateUser)
 
 module.exports = router;
