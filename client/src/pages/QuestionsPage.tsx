@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GradientButton from '../components/GradientButton'; 
-import SimpleInput from '../components/SimpleInput';
+import SimpleInput from '../components/SimpleOneLineInput';
 
 const QuestionsPage: React.FC = () => {
     const navigate = useNavigate();

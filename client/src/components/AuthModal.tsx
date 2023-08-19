@@ -1,10 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { BsLinkedin } from 'react-icons/bs';
 import { AiOutlineClose } from 'react-icons/ai';
+import { loginUser, registerUser } from '../utils/api/authAPI'; 
+import { StoreContext, StoreContextType } from '../utils/store'; 
+import { LOGIN_SUCCESS } from '../utils/actions';
 
 function AuthModal({ onAuthClose }: { onAuthClose: () => void }) {
-    const [isSignIn, setIsSignIn] = useState(true); 
+  const [isSignIn, setIsSignIn] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { dispatch } = useContext(StoreContext) as StoreContextType;
+  
+
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (isSignIn) {
+        // Call login function
+        const result = await loginUser(email, password);
+        console.log('Login successful:', result);
+        dispatch({ type: LOGIN_SUCCESS, payload: result });
+        onAuthClose();
+      } else {
+        const result = await registerUser('Name', email, password); // Add name field if needed for registration
+        console.log('Registration successful:', result);
+        // Handle successful registration (e.g., update global state, redirect)
+        dispatch({ type: LOGIN_SUCCESS, payload: result });
+        onAuthClose();
+      }
+    } catch (err) {
+      setError('Authentication failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
     return (
             <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -27,30 +63,30 @@ function AuthModal({ onAuthClose }: { onAuthClose: () => void }) {
                     </h2>
                 </div>
 
-                <form className="mt-8 space-y-6">
+                <form className="mt-8 space-y-6" onSubmit={handleAuth}>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-                            Email address
-                        </label>
+                        {/* ... (Email input field) */}
                         <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            required
-                            className="w-full rounded-md border-2 border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 py-2 text-lg"
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full rounded-md border-2 border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 py-2 px-2 text-lg"
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900 mb-2">
-                            Password
-                        </label>
+                        {/* ... (Password input field) */}
                         <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            required
-                            className="w-full rounded-md border-2 border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 py-2 text-lg"
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full rounded-md border-2 border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 py-2 px-2 text-lg"
                         />
                     </div>
 

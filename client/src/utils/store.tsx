@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, ReactNode } from 'react';
 import { reducer, initialState } from './reducer';
 
-type StoreContextType = {
+export type StoreContextType = {
     state: typeof initialState;
     dispatch: React.Dispatch<any>;
 };
@@ -13,7 +13,12 @@ type StoreProviderProps = {
 };
 
 export const StoreProvider: React.FC<StoreProviderProps> = ({ children }) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const savedStateString = localStorage.getItem('appState');
+    const savedState = savedStateString ? JSON.parse(savedStateString) : null;
+
+    const appState = savedState || initialState;
+
+    const [state, dispatch] = useReducer(reducer, appState);
 
     return (
         <StoreContext.Provider value={{ state, dispatch }}>
