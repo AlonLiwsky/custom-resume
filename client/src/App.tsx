@@ -1,14 +1,11 @@
 import routes from './routes';
 import { useRoutes } from 'react-router-dom';
-import { StoreProvider } from './utils/store';
+import useAuthTokenRefresh from './hooks/useAuthTokenRefresh';
 
-const App = () => {
+const App: React.FC = () => {
   const content = useRoutes(routes);
-  return (
-  <StoreProvider>
-    {content}
-  </StoreProvider>
-  )
+  useAuthTokenRefresh();
+  return content
 };
 
 export default App;
