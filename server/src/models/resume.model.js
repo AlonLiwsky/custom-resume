@@ -53,7 +53,7 @@ const formattedExperienceSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
       required: true,
     },
-  }, 
+  },
   {
     timestamps: true,
   }

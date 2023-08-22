@@ -9,7 +9,7 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Object>}
  */
 const saveExperience = async (experienceBody) => {
-  // Check if we already saved experience for the user 
+  // Check if we already saved experience for the user
   if (await RawExperience.RawExperience.userAlreadyHas(experienceBody.userId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User already has loaded experience');
   }
@@ -18,7 +18,7 @@ const saveExperience = async (experienceBody) => {
   RawExperience.RawExperience.create(experienceBody);
 
   // Use openAI adapter to extract from the experience the provided list of fields and also the list of the one not present in the experience
-  const fields = await OpenAIAdapter.openaiAdapter.extractExperienceFields(experienceBody.experience, [1,2]);
+  const fields = await OpenAIAdapter.openaiAdapter.extractExperienceFields(experienceBody.experience);
 
   // Save the formatted experience (the fields that gpt found from the text extracted and saved as JSON format)
   FormattedExperience.FormattedExperience.create({
@@ -30,14 +30,13 @@ const saveExperience = async (experienceBody) => {
   return {missing_fields: fields.missingFields};
 };
 
-
 /**
  * Update a experience
  * @param {Object} newExperience
  */
 const updateExperience = async (newExperience, userId) => {
   // Check if we already saved experience for the user 
-  const experience = await FormattedExperience.FormattedExperience.findByUser(userId)
+  const experience = await FormattedExperience.FormattedExperience.findByUser(userId);
   if (!experience) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Experience not found for the provided user');
   }
