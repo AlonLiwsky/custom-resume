@@ -7,6 +7,13 @@ const saveExperience = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(missingFields);
 });
 
+const updateExperience = catchAsync(async (req, res) => {
+  //const missingFields = await resumeService.saveExperience(req.body, req.user.id);
+  await resumeService.updateExperience(req.body, req.user.id);
+  res.status(httpStatus.OK).send();
+});
+
 module.exports = {
   saveExperience,
+  updateExperience,
 };

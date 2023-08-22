@@ -50,14 +50,24 @@ const formattedExperienceSchema = new mongoose.Schema(
       lowercase: true,
     },
     fields: {
-      type: Object,
+      type: mongoose.Schema.Types.Mixed,
       required: true,
     },
-  },
+  }, 
   {
     timestamps: true,
   }
 );
+
+/**
+ * Find a formatted experience for a specific user
+ * @param {ObjectId} userId - The user id
+ * @returns {FormattedExperience}
+ */
+formattedExperienceSchema.statics.findByUser = async function (userId) {
+  const experience = await this.findOne({ userId });
+  return experience;
+};
 
 // add plugin that converts mongoose to json
 formattedExperienceSchema.plugin(toJSON);

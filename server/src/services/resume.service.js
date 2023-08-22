@@ -30,6 +30,24 @@ const saveExperience = async (experienceBody) => {
   return {missing_fields: fields.missingFields};
 };
 
+
+/**
+ * Update a experience
+ * @param {Object} newExperience
+ */
+const updateExperience = async (newExperience, userId) => {
+  // Check if we already saved experience for the user 
+  const experience = await FormattedExperience.FormattedExperience.findByUser(userId)
+  if (!experience) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Experience not found for the provided user');
+  }
+
+  // Update the formatted experience with the new fields
+  experience.fields = { ...experience.fields, ...newExperience.experience };
+  await experience.save();
+};
+
 module.exports = {
   saveExperience,
+  updateExperience,
 };
