@@ -89,6 +89,12 @@ class OpenAIAdapter {
       throw error;
     }
   }
+
+  static async generateResume(experience, role, templateId) {
+    console.log(experience, role, templateId)
+    //returned mocked resume
+    return {name: "Alon Liwsky", description: "give me a job please :)"}
+  }
 }
 
 module.exports = OpenAIAdapter;

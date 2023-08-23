@@ -11,6 +11,14 @@ router
   .post(auth(), validate(resumeValidation.saveExperience), resumeController.saveExperience)
   .put(auth(), validate(resumeValidation.updateExperience), resumeController.updateExperience);
 
+router 
+  .route('/role')
+  .post(auth(), validate(resumeValidation.saveRole), resumeController.saveRole);
+
+router
+  .route('/')
+  .post(auth(), validate(resumeValidation.createResume), resumeController.createResume);
+
 module.exports = router;
 
 /**

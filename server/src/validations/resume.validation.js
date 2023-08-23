@@ -17,7 +17,26 @@ const updateExperience = {
     .min(1),
 };
 
+const saveRole = {
+  body: Joi.object()
+    .keys({
+      role: Joi.string(),
+    })
+    .min(1),
+};
+
+const createResume = {
+  body: Joi.object()
+  .keys({
+    roleId: Joi.string(),
+    templateId: Joi.string(),
+  })
+    .min(1),
+};
+
 module.exports = {
   saveExperience,
   updateExperience,
+  saveRole,
+  createResume,
 };

@@ -78,7 +78,74 @@ formattedExperienceSchema.plugin(paginate);
  */
 const FormattedExperience = mongoose.model('FormattedExperience', formattedExperienceSchema);
 
+const roleSchema = mongoose.Schema(
+  {
+    role: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    userId: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// add plugin that converts mongoose to json
+roleSchema.plugin(toJSON);
+roleSchema.plugin(paginate);
+
+/**
+ * @typedef Role
+ */
+const Role = mongoose.model('Role', roleSchema);
+
+const resumeSchema = mongoose.Schema(
+  {
+    roleId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    userId: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+    templateId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    resume: {
+      type: Object,
+      required: true,
+    }
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// add plugin that converts mongoose to json
+resumeSchema.plugin(toJSON);
+resumeSchema.plugin(paginate);
+
+/**
+ * @typedef Role
+ */
+const Resume = mongoose.model('Resume', resumeSchema);
+
 module.exports = {
   RawExperience,
   FormattedExperience,
+  Role,
+  Resume,
 };

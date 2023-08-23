@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { RawExperience, FormattedExperience } = require('../models');
+const { RawExperience, FormattedExperience, Role, Resume } = require('../models');
 const OpenAIAdapter = require('../adapters');
 const ApiError = require('../utils/ApiError');
 
@@ -46,7 +46,59 @@ const updateExperience = async (newExperience, userId) => {
   await experience.save();
 };
 
+/**
+ * Save a new role
+ * @param {Object} roleBody
+ *  * @returns {string}
+ */
+const saveRole = async (roleBody, userId) => {
+   // Check if we already saved experience for the user 
+   const experience = await FormattedExperience.FormattedExperience.findByUser(userId);
+   if (!experience) {
+     throw new ApiError(httpStatus.BAD_REQUEST, 'Experience not found for the provided user');
+   }
+
+  // Save the role information
+  const role = await Role.Role.create({role: roleBody.role, userId: userId});
+  return role.id
+};
+
+/**
+ * Create a new resume
+ * @param {Object} createResumeBody
+ * @returns {Object}
+ */
+const createResume = async (createResumeBody, userId) => {
+   // Get formatted experience 
+   const experience = await FormattedExperience.FormattedExperience.findByUser(userId);
+   if (!experience) {
+     throw new ApiError(httpStatus.BAD_REQUEST, 'Experience not found for the provided user');
+   }
+  
+   // Get role information 
+   const role = await Role.Role.findById(createResumeBody.roleId);
+   if (!role) {
+     throw new ApiError(httpStatus.BAD_REQUEST, 'Role not found for the provided role ID');
+   }
+
+  // Use openAI adapter generate the fields for the resume according to the experience, role and selected template
+  const resumeFields = await OpenAIAdapter.openaiAdapter.generateResume(experience, role, createResumeBody.templateId);
+
+  // Save the generated resume fields
+  Resume.Resume.create({
+    roleId: createResumeBody.roleId, 
+    userId: userId,
+    templateId: createResumeBody.templateId,
+    resume: resumeFields,
+  });
+
+  // Return only the missing fields
+  return {resume_fields: resumeFields};
+};
+
 module.exports = {
   saveExperience,
   updateExperience,
+  saveRole,
+  createResume
 };
