@@ -21,6 +21,7 @@ const useAuthTokenRefresh = () => {
 
       fetchNewToken();
     }
+    console.log(state);
   }, []);
 
   return; 
