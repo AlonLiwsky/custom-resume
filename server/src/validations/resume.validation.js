@@ -4,7 +4,6 @@ const saveExperience = {
   body: Joi.object()
     .keys({
       experience: Joi.string(),
-      userId: Joi.string(),
     })
     .min(1),
 };
