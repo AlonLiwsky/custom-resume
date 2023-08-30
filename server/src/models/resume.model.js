@@ -49,18 +49,10 @@ const formattedExperienceSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
-    fields: [
-      {
-        field: {
-          type: String,
-          required: true,
-        },
-        value: {
-          type: mongoose.Schema.Types.Mixed, // Allow mixed types (string or array of key-value objects)
-          required: true,
-        },
-      },
-    ],
+    fields: {
+      type: Object,
+      required: true,
+    },
   },
   {
     timestamps: true,

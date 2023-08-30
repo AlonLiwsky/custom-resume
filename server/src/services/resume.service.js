@@ -21,7 +21,7 @@ const saveExperience = async (experienceBody, userId) => {
   });
 
   // Use openAI adapter to extract from the experience the provided list of fields and also the list of the one not present in the experience
-  const fields = OpenAIAdapter.openaiAdapter.extractExperienceFields(experienceBody.experience, [1,2]);
+  const fields = await OpenAIAdapter.openaiAdapter.extractExperienceFields(experienceBody.experience, [1,2]);
 
   // Save the formatted experience (the fields that gpt found from the text extracted and saved as JSON format)
   FormattedExperience.FormattedExperience.create({
@@ -30,7 +30,7 @@ const saveExperience = async (experienceBody, userId) => {
   });
 
   // Return only the missing fields
-  return {missing_fields: (await fields).missingFields};
+  return {missing_fields: fields.missingFields};
 };
 
 module.exports = {
