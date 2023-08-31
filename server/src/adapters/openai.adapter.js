@@ -1,4 +1,5 @@
-const { Configuration, OpenAIApi } = require('openai');
+const { Configuration, OpenAIApi } = require("openai");
+const config = require('../config/config');
 
 const extractExperiencePrompt = {
   systemMsg: `Perform the following tasks:
@@ -53,10 +54,12 @@ class OpenAIAdapter {
     try {
 
       let responseContent
-      if (process.env.OPENAI_API_KEY !== "mock") {
+      if (process.env.OPENAI_API_KEY != "mock") {
         const completion = await openai.createChatCompletion({
           model: "gpt-3.5-turbo",
           messages,
+          temperature: 0,
+          top_p: 0.1,
         });
 
         responseContent = completion.data.choices[0].message.content;
