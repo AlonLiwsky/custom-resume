@@ -8,8 +8,8 @@ const router = express.Router();
 
 router
   .route('/experience')
-  .post(auth(), validate(resumeValidation.saveExperience), resumeController.saveExperience);
-  //.put(auth('manageUsers'), validate(userValidation.updateUser), resumeController.updateUser)
+  .post(auth(), validate(resumeValidation.saveExperience), resumeController.saveExperience)
+  .put(auth(), validate(resumeValidation.updateExperience), resumeController.updateExperience);
 
 module.exports = router;
 
