@@ -9,10 +9,9 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Object>}
  */
 
-const saveExperience = async (experienceBody) => {
+const saveExperience = async (experienceBody, userId) => {
   // Check if we already saved experience for the user
-  if (await RawExperience.RawExperience.userAlreadyHas(experienceBody.userId)) {
-
+  if (await RawExperience.RawExperience.userAlreadyHas(userId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User already has loaded experience');
   }
 
